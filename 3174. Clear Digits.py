@@ -10,3 +10,4 @@ class Solution:
                 stack.append(char)  # Push letters to stack
 
         return "".join(stack)
+    
