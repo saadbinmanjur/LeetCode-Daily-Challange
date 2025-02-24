@@ -45,4 +45,3 @@ class Solution:
             return alice if isLeaf else alice + maxLeafSum
 
         return dfs_sum(0, 0, -1)
-    
