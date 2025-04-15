@@ -43,5 +43,4 @@ class Solution:
             right_count = right_tree.query(n - 1) - right_tree.query(val)  # Count of values > val on the right
             result += left_count * right_count
             left_tree.update(val, 1)  # Add current value to left
-
         return result
