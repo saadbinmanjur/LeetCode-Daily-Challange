@@ -11,5 +11,4 @@ class Solution:
         
         min_start = lower - min_prefix
         max_start = upper - max_prefix
-        
         return max(0, max_start - min_start + 1)
