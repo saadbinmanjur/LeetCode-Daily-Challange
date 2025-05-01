@@ -1,40 +1,33 @@
-from typing import List
-import bisect
-from collections import deque
-
 class Solution:
     def maxTaskAssign(self, tasks: List[int], workers: List[int], pills: int, strength: int) -> int:
-        tasks.sort()
-        workers.sort()
-
         def can_assign(k):
-            available_workers = deque(workers[-k:])
-            i = k - 1
-            pills_left = pills
-            temp = []
-
-            for j in reversed(range(k)):
-                task = tasks[j]
-                if available_workers and available_workers[-1] >= task:
-                    available_workers.pop()
-                elif pills_left > 0:
-                    while available_workers and available_workers[0] + strength < task:
-                        available_workers.popleft()
-                    if not available_workers:
-                        return False
-                    pills_left -= 1
-                    available_workers.popleft()
+            avail = worker_strengths[-k:]
+            pills_remain = total_pills
+            for req in reversed(task_requirements[:k]):
+                if avail and avail[-1] >= req:
+                    avail.pop()
                 else:
-                    return False
+                    if pills_remain <= 0:
+                        return False
+                    threshold = req - pill_boost
+                    idx = bisect_left(avail, threshold)
+                    if idx == len(avail):
+                        return False
+                    avail.pop(idx)
+                    pills_remain -= 1
             return True
 
-        low, high = 0, min(len(tasks), len(workers))
-        res = 0
+        task_requirements = sorted(tasks)
+        worker_strengths = sorted(workers)
+        total_pills = pills
+        pill_boost = strength
+        
+        low, high, answer = 0, min(len(tasks), len(workers)), 0
         while low <= high:
             mid = (low + high) // 2
             if can_assign(mid):
-                res = mid
+                completed = mid
                 low = mid + 1
             else:
                 high = mid - 1
-        return res
+        return completed
