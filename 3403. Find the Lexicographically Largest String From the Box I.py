@@ -1,20 +1,7 @@
 class Solution:
-    def answerString(self, word: str, numFriends: int) -> str:
-        from functools import lru_cache
-
-        n = len(word)
-        result = []
-
-        @lru_cache(None)
-        def dfs(start, k, path):
-            if k == 1:
-                if start < n:
-                    part = word[start:]
-                    result.extend(path + [part])
-                return
-            for i in range(start + 1, n - k + 2):  # ensure enough room for remaining k-1 parts
-                dfs(i, k - 1, path + [word[start:i]])
-
-        dfs(0, numFriends, [])
-
-        return max(result)
+    def answerString(self, word: str, n: int) -> str:
+        m=len(word)-n+1 # splits to be done with m length 
+        if n==1: # if only one split we can do total word is taken 
+            return word
+# else check all m length splits and gind max in them 
+        return max(word[i:i+m] for i in range(len(word)))
